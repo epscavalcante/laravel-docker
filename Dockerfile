@@ -19,4 +19,6 @@ RUN ln -s public html
 
 RUN usermod -u 1000 www-data
 
-CMD [ "./entrypoint.sh" ]
+EXPOSE 9000
+
+CMD [ "php-fpm" ]

@@ -61,7 +61,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          dockerfile: Dockerfile.prod
           push: true
           build-args: VERSION=${{ env.BUILD_TAG }}
           tags: ${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}
