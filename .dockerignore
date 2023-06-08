@@ -4,7 +4,7 @@ package.json
 public/hot
 public/storage
 storage/*.key
-vendor # verificar em que momento é aplicado o composer install
+vendor
 .idea
 _ide_helper.php
 .vscode
