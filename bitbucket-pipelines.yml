@@ -68,6 +68,6 @@ pipelines:
     - step: 
         <<: *lint
   branches:
-    main
+    main:
       - step: 
           <<: &build-image
