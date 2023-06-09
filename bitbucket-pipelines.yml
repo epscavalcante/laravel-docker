@@ -43,6 +43,21 @@ definitions:
         script:
           - ./vendor/bin/pint
 
+    - step: &build-image
+        name: Building API Image
+        script:
+          - docker build -t laravel-example:$APP_VERSION -f ./docker/php/Dockerfile.prod .
+          - docker tag laravel-example laravel-example:$APP_VERSION
+          - pipe: atlassian/aws-ecr-push-image:2.0.0
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: us-east-1
+              IMAGE_NAME: laravel-example:$APP_VERSION
+              TAGS: "$MAIN_IMAGE_TAG $APP_VERSION $BITBUCKET_BUILD_NUMBER"
+        cache:
+          - docker
+
 pipelines:
   default:
     - step: 
@@ -51,3 +66,7 @@ pipelines:
         <<: *test
     - step: 
         <<: *lint
+  branches:
+    main
+      - step: 
+          <<: &build-image
