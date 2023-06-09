@@ -46,9 +46,8 @@ definitions:
         script:
           - export DOCKER_BUILDKIT=1
           - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
-          - docker build -t epscavalcante/laravel-example:latest -f ./.docker/php/Dockerfile.prod .
-          # - docker tag epscavalcante/laravel-example epscavalcante/laravel-example:$APP_VERSION
-          - docker push epscavalcante/laravel-example:latest
+          - docker build -t $DOCKER_HUB_USER/laravel-example:$BITBUCKET_BRANCH-$BITBUCKET_BUILD_NUMBER -f ./.docker/php/Dockerfile.prod .
+          - docker push $DOCKER_HUB_USER/laravel-example:$BITBUCKET_BRANCH-$BITBUCKET_BUILD_NUMBER
           # - pipe: atlassian/aws-ecr-push-image:2.0.0
           #   variables:
           #     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
