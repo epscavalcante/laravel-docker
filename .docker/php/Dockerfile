@@ -13,9 +13,9 @@ COPY . /var/www
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer install \
-    && php artisan optimize:clear \
-    && chmod -R 775 storage
+# RUN composer install \
+#     && php artisan optimize:clear \
+#     && chmod -R 775 storage
 
 RUN chown -R www-data:www-data /var/www
 

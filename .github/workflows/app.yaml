@@ -60,7 +60,8 @@ jobs:
       - name: Build & push da imagem do docker
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ./.docker/php
+          dockerfile: Dockerfile.prod
           push: true
           build-args: VERSION=${{ env.BUILD_TAG }}
           tags: ${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}
