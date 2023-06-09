@@ -44,6 +44,7 @@ definitions:
     - step: &build-image
         name: Building API Image
         script:
+          - export DOCKER_BUILDKIT=1
           - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
           - docker build -t epscavalcante/laravel-example:latest -f ./.docker/php/Dockerfile.prod .
           # - docker tag epscavalcante/laravel-example epscavalcante/laravel-example:$APP_VERSION
