@@ -1,0 +1,44 @@
+image:
+  name: 063071652432.dkr.ecr.us-east-1.amazonaws.com/wastechain:latest
+  aws: 
+    access-key: $AWS_ACCESS_KEY
+    secret-key: $AWS_SECRET_KEY
+
+pipelines:
+  pull-requests:
+    '**': #this runs as default for any branch not elsewhere defined
+      - step: 
+          name: Composer Install
+          script:
+            - composer install
+          services:
+            - docker
+          caches:
+            - docker
+          artifacts:
+            - vendor/**
+      - parallel:
+          - step:
+              name: PHPUnit
+              script:
+                - service mysql start
+                - mysql -u root -e "CREATE DATABASE testdb;"
+                - php -r "file_exists('.env') || copy('.env.pipelines', '.env');"
+                - php artisan migrate
+                - php artisan test
+              services:
+                - docker
+              caches:
+                - docker
+              artifacts:
+                - vendor/**
+          - step:
+              name: TLint
+              script:
+                - vendor/bin/tlint
+              services:
+                - docker
+              caches:
+                - docker
+              artifacts:
+                - vendor/**
