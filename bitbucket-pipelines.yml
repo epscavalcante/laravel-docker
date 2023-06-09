@@ -20,4 +20,5 @@ pipelines:
           - composer install
           - php artisan key:generate
           - php artisan test
+          - php artisan migrate:fresh --force
           - ./vendor/bin/pint
