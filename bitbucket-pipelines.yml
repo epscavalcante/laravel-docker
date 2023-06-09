@@ -1,5 +1,14 @@
 image: php:8.1.18
 
+definitions:
+  services:
+    db:
+      image: mysql:8.0.33
+      environment:
+        MYSQL_DATABASE: 'app'
+        MYSQL_ROOT_PASSWORD: 'root'
+        memory: '256'
+
 pipelines:
   default:
     - step:
@@ -10,4 +19,5 @@ pipelines:
           - php -r "file_exists('.env') || copy('.env.example', '.env');"
           - composer install
           - php artisan key:generate
-          - vendor/bin/phpunit
+          - php artisan test
+          - ./vendor/bin/pint
