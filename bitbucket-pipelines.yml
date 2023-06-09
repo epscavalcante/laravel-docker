@@ -45,6 +45,9 @@ definitions:
 
 pipelines:
   default:
-    - step: *build
-    - step: *test
-    - step: *lint
+    - step: 
+      <<: *build
+    - step: 
+      <<: *test
+    - step: 
+      <<: *lint
