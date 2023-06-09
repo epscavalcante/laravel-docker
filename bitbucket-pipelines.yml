@@ -45,7 +45,7 @@ definitions:
         name: Building API Image
         script:
           - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
-          - docker build -t epscavalcante/laravel-example:$APP_VERSION -f ./docker/php/Dockerfile.prod .
+          - docker build -t epscavalcante/laravel-example:$APP_VERSION -f ./.docker/php/Dockerfile.prod .
           - docker tag epscavalcante/laravel-example epscavalcante/laravel-example:$APP_VERSION
           - docker push epscavalcante/larevel-example:$APP_VERSION
           # - pipe: atlassian/aws-ecr-push-image:2.0.0
