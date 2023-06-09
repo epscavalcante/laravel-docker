@@ -1,17 +1,19 @@
 version: '3'
 
+networks: 
+  laranet:
+    driver: bridge 
+
 services:
   app:
     build:
-      context: ./
-      dockerfile: Dockerfile.local
+      context: .docker/php
+    entrypoint: .docker/entrypoint.sh
     container_name: app
+    networks:
+      - laranet
     volumes:
-      - .:/var/wwww
-    extra_hosts:
-      - host.docker.internal:172.17.0.1
-    ports:
-      - "8000:9000"
+      - .:/var/www
     depends_on:
       db:
         condition: service_healthy
@@ -25,11 +27,26 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./database/data:/var/lib/mysql
-    # networks:
-    #   - poc
+      - .docker/db/data:/var/lib/mysql
+    networks:
+      - laranet
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 10s
       retries: 3
+
+  nginx:
+    build: 
+      context: .docker/nginx
+    container_name: nginx
+    restart: always
+    tty: true
+    volumes:
+      - .:/var/www
+    networks: 
+      - laranet
+    ports: 
+      - "8000:80"
+    # depends_on:
+    #   - app
