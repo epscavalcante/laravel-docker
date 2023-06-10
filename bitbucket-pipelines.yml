@@ -81,12 +81,12 @@ pipelines:
   #       <<: *build-image
   branches:
     main:
-      - step: 
-          <<: *build
-      - parallel:
-        fails-fast: true
-        steps:
-          - step: *lint
-          - step: *test-memory
-          - step: *test-database
+      - step: *build
+      - step:
+        - parallel:
+            fails-fast: true
+            steps:
+              - step: *lint
+              - step: *test-memory
+              - step: *test-database
       # - step: *build-image
