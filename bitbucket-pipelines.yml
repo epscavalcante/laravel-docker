@@ -82,7 +82,10 @@ pipelines:
   branches:
     main:
       - step: *build
-      # - step: *lint
-      # - step: *test-memory
-      # - step: *test-database
+      - parallel:
+        fails-fast: true
+        steps:
+          - step: *lint
+          - step: *test-memory
+          - step: *test-database
       # - step: *build-image
