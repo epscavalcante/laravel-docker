@@ -39,7 +39,7 @@ definitions:
     - step: &lint
         name: 'Lint'
         script:
-          - ./vendor/bin/pint
+          - ./vendor/bin/pint --test
 
     - step: &build-image
         name: Build and Push image to DockerHub
