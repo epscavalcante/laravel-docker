@@ -83,11 +83,11 @@ pipelines:
     main:
       - step: 
         <<: *build
-    - step: 
-        <<: *lint
-    - step: 
-        <<: *test-memory
-    - step: 
-        <<: *test-database
-    - step: 
-        <<: *build-image
+      - step: 
+          <<: *lint
+      - step: 
+          <<: *test-memory
+      - step: 
+          <<: *test-database
+      - step: 
+          <<: *build-image
