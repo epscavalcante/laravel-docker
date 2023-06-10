@@ -65,10 +65,12 @@ pipelines:
     - step: 
         <<: *build
     - step: 
+        <<: *lint
+    - step: 
         <<: *test
     - step: 
-        <<: *lint
-  branches:
-    main:
-      - step: 
-          <<: *build-image
+        <<: *build-image
+  # branches:
+  #   main:
+  #     - step: 
+  #         <<: *build-image
