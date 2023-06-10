@@ -82,11 +82,19 @@ pipelines:
   branches:
     main:
       - step: *build
-      - step:
-        - parallel:
-            fails-fast: true
-            steps:
-              - step: *lint
-              - step: *test-memory
-              - step: *test-database
+      - parallel:
+        fails-fast: true
+        steps:
+          - step:
+            name: 'step parallel 1'
+            script
+              - echo "execute 1"
+          - step:
+            name: 'step parallel 2'
+            script
+              - echo "execute 2"
+        # steps:
+        #   - step: *lint
+        #   - step: *test-memory
+        #   - step: *test-database
       # - step: *build-image
