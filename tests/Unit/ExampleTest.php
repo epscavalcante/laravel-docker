@@ -18,7 +18,8 @@ class ExampleTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_that_user_exists_into_database():void {
+    public function test_that_user_exists_into_database(): void
+    {
         $email = 'user@test.com';
 
         User::factory()->create(['email' => $email]);
@@ -30,7 +31,8 @@ class ExampleTest extends TestCase
         ]);
     }
 
-    public function test_that_user_was_deleted():void {
+    public function test_that_user_was_deleted(): void
+    {
         $email = 'user@test.com';
 
         $user = User::factory()->create(['email' => $email]);
