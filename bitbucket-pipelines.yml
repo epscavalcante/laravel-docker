@@ -82,7 +82,7 @@ pipelines:
   branches:
     main:
       - step: 
-        <<: *build
+          <<: *build
       - parallel:
         fails-fast: true
         steps:
