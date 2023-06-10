@@ -80,21 +80,22 @@ pipelines:
   #   - step: 
   #       <<: *build-image
   branches:
+    pull-requests:
+      '**':
+        - step: *build
+        - parallel:
+            fails-fast: true
+            steps:
+              - step: *lint
+              - step: *test-memory 
     main:
       - step: *build
       - parallel:
           fails-fast: true
           steps:
-            - step:
-                name: 'step parallel 1'
-                script:
-                  - echo 'execute 1'
-            - step:
-                name: 'step parallel 2'
-                script:
-                  - echo 'execute 2'
-          # steps:
             - step: *lint
-            - step: *test-memory
+            # Para PR usar o memória
+            - step: *test-memory 
+            # Para stag / prod
             - step: *test-database
-      # - step: *build-image
+      - step: *build-image
