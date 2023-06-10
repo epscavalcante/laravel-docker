@@ -1,6 +1,6 @@
 {
     "preset": "laravel",
     "exclude": [
-        "database/data"
+        ".docker/db/data"
     ]
 }
