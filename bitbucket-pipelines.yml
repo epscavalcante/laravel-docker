@@ -81,7 +81,8 @@ pipelines:
   #       <<: *build-image
   branches:
     main:
-      - step: *build
+      - step: 
+        <<: *build
       - parallel:
         fails-fast: true
         steps:
