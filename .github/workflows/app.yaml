@@ -63,4 +63,4 @@ jobs:
           file: ./.docker/php/Dockerfile.prod
           push: true
           build-args: VERSION=${{ env.BUILD_TAG }}
-          tags: ${{ github.sha }}, latest, ${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}
+          tags: ${{ env.IMAGE_NAME }}:${{ env.BUILD_TAG }}
