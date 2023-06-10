@@ -79,15 +79,15 @@ pipelines:
   #       <<: *test
   #   - step: 
   #       <<: *build-image
-  branches:
-    pull-requests:
-      '**':
-        - step: *build
-        - parallel:
-            fails-fast: true
-            steps:
-              - step: *lint
-              - step: *test-memory 
+  pull-requests:
+    '**':
+      - step: *build
+      - parallel:
+          fails-fast: true
+          steps:
+            - step: *lint
+            - step: *test-memory
+  branches: 
     main:
       - step: *build
       - parallel:
