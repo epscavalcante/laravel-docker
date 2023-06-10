@@ -94,7 +94,7 @@ pipelines:
                 script:
                   - echo 'execute 2'
           # steps:
-          #   - step: *lint
-          #   - step: *test-memory
-          #   - step: *test-database
+            - step: *lint
+            - step: *test-memory
+            - step: *test-database
       # - step: *build-image
