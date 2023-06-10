@@ -33,7 +33,7 @@ definitions:
           - composer
         script:
           # - docker-php-ext-install pdo pdo_mysql
-          - docker-php-ext-install php-sqlite3
+          # - docker-php-ext-install php-sqlite3
           - php artisan test
           - php artisan migrate:fresh --force
 
