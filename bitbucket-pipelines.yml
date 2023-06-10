@@ -47,9 +47,9 @@ definitions:
           - export DOCKER_BUILDKIT=1
           - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
           - docker build -t $DOCKER_HUB_USER/laravel-example -f ./.docker/php/Dockerfile.prod .
-          - docker tag $DOCKER_HUB_USER/laravel-example:latest
-          - docker tag $DOCKER_HUB_USER/laravel-example:$BITBUCKET_COMMIT
-          - docker tag $DOCKER_HUB_USER/laravel-example:$BITBUCKET_BRANCH-$BITBUCKET_BUILD_NUMBER
+          - docker tag $DOCKER_HUB_USER/laravel-example $DOCKER_HUB_USER/laravel-example:latest
+          - docker tag $DOCKER_HUB_USER/laravel-example $DOCKER_HUB_USER/laravel-example:$BITBUCKET_COMMIT
+          - docker tag $DOCKER_HUB_USER/laravel-example $DOCKER_HUB_USER/laravel-example:$BITBUCKET_BRANCH-$BITBUCKET_BUILD_NUMBER
           - docker push --all-tags $DOCKER_HUB_USER/laravel-example
           # - pipe: atlassian/aws-ecr-push-image:2.0.0
           #   variables:
