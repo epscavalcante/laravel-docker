@@ -87,7 +87,7 @@ definitions:
               AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
               AWS_DEFAULT_REGION: us-east-1
               IMAGE_NAME: $IMAGE_NAME
-              TAGS: "latest $IMAGE_NAME:$BITBUCKET_COMMIT"
+              TAGS: "latest $BITBUCKET_COMMIT"
               # DEBUG: true
           # - pipe: atlassian/aws-ecs-deploy:1.6.2
           #   variables:
