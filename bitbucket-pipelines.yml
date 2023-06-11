@@ -50,26 +50,33 @@ definitions:
           - ./vendor/bin/pint --test
 
     - step: &build-image
-        name: Build and Push image to DockerHub
+        name: Build image
         script:
           - export DOCKER_BUILDKIT=1
+          - echo $BITBUCKET_REPO_SLUG
+          - IMAGE_NAME=$DOCKER_HUB_USER/$BITBUCKET_REPO_SLUG
+          - docker build . -t $IMAGE_NAME -f ./.docker/php/Dockerfile.prod
+          - docker save $IMAGE_NAME --output "${BITBUCKET_REPO_SLUG}.tar"
+        services:
+          - docker
+        caches:
+          - docker
+        artifacts:
+          - "*.tar"
+
+    - step: &push-image
+        name: Push image to DockerHub
+        script:
+          - IMAGE_NAME=$DOCKER_HUB_USER/$BITBUCKET_REPO_SLUG
           - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
-          - docker build -t $DOCKER_HUB_USER/laravel-example -f ./.docker/php/Dockerfile.prod .
-          - docker tag $DOCKER_HUB_USER/laravel-example $DOCKER_HUB_USER/laravel-example:latest
-          - docker tag $DOCKER_HUB_USER/laravel-example $DOCKER_HUB_USER/laravel-example:$BITBUCKET_COMMIT
-          - docker push --all-tags $DOCKER_HUB_USER/laravel-example
-          # - pipe: atlassian/aws-ecr-push-image:2.0.0
-          #   variables:
-          #     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-          #     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-          #     AWS_DEFAULT_REGION: us-east-1
-          #     IMAGE_NAME: laravel-example:$APP_VERSION
-          #     TAGS: "$MAIN_IMAGE_TAG $APP_VERSION $BITBUCKET_BUILD_NUMBER"
+          - docker load --input "${BITBUCKET_REPO_SLUG}.tar"
+          - docker tag $IMAGE_NAME $IMAGE_NAME:latest
+          - docker tag $IMAGE_NAME $IMAGE_NAME:$BITBUCKET_COMMIT
+          - docker push --all-tags $IMAGE_NAME
         services:
           - docker
 
 pipelines:
-
   pull-requests:
     '**':
       - step: *build
@@ -84,10 +91,11 @@ pipelines:
       - parallel:
           fails-fast: true
           steps:
-            # Ja rodado no PR, preciso aqui novamente? (é um tempo de build desnecessário)
+            # Ja rodado no PR, preciso aqui novamente? (Ã© um tempo de build desnecessÃ¡rio)
             # - step: *lint
-            # Ja rodado no PR, aqui é desnecessário pois nesses ambientes será BD de verdade (é um tempo de build desnecessário)
+            # Ja rodado no PR, aqui Ã© desnecessário pois nesses ambientes serão BD de verdade (Ã© um tempo de build desnecessário)
             # - step: *test-memory 
             # Para stag / prod
             - step: *test-database
       - step: *build-image
+      - step: *push-image
