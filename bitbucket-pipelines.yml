@@ -86,8 +86,8 @@ definitions:
               AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
               AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
               AWS_DEFAULT_REGION: us-east-1
-              IMAGE_NAME: laravel:latest
-              TAGS: "$IMAGE_NAME:$BITBUCKET_COMMIT"
+              IMAGE_NAME: $BITBUCKET_REPO_SLUG
+              TAGS: "latest $BITBUCKET_COMMIT"
           # - pipe: atlassian/aws-ecs-deploy:1.6.2
           #   variables:
           #     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
