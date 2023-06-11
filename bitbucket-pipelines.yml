@@ -82,10 +82,6 @@ definitions:
           - docker
 
 pipelines:
-  default:
-    - step: *build-image
-    - step: *push-image-ecr
-
   pull-requests:
     '**':
       - step: *build
