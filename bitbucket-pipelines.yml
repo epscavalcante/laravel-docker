@@ -76,7 +76,34 @@ definitions:
         services:
           - docker
 
+    - step: &push-image-ecr
+        name: Push image to AWS ECR
+        script:
+          - IMAGE_NAME=$DOCKER_HUB_USER/$BITBUCKET_REPO_SLUG
+          - docker load --input "${BITBUCKET_REPO_SLUG}.tar"
+          - pipe: atlassian/aws-ecr-push-image:2.0.0
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: us-east-1
+              IMAGE_NAME: laravel:latest
+              TAGS: "$IMAGE_NAME:$BITBUCKET_COMMIT"
+          # - pipe: atlassian/aws-ecs-deploy:1.6.2
+          #   variables:
+          #     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+          #     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+          #     AWS_DEFAULT_REGION: us-east-2
+          #     CLUSTER_NAME: "Giro-Staging"
+          #     SERVICE_NAME: "giro-service-api"
+          #     FORCE_NEW_DEPLOYMENT: "true"
+        cache:
+          - docker
+
 pipelines:
+  default:
+    - step: *build-image
+    - step: *push-image-ecr
+
   pull-requests:
     '**':
       - step: *build
