@@ -70,15 +70,6 @@ definitions:
 
 pipelines:
 
-  # default:
-  #   - step: 
-  #       <<: *build
-  #   - step: 
-  #       <<: *lint
-  #   - step: 
-  #       <<: *test
-  #   - step: 
-  #       <<: *build-image
   pull-requests:
     '**':
       - step: *build
@@ -93,9 +84,10 @@ pipelines:
       - parallel:
           fails-fast: true
           steps:
-            - step: *lint
-            # Para PR usar o memória
-            - step: *test-memory 
+            # Ja rodado no PR, preciso aqui novamente? (é um tempo de build desnecessário)
+            # - step: *lint
+            # Ja rodado no PR, aqui é desnecessário pois nesses ambientes será BD de verdade (é um tempo de build desnecessário)
+            # - step: *test-memory 
             # Para stag / prod
             - step: *test-database
       - step: *build-image
