@@ -105,14 +105,14 @@ definitions:
     - step: &deploy-to-test
         name: Deploy to test
         script:
-          - echo "Deploying to test"
+          - echo "Deploying to TEST enviroment automático"
 
     - step: &deploy-to-staging
         name: Deploy to stag
         deployment: staging
         trigger: manual
         script:
-          - echo "Deploying to staging environment de forma manual"
+          - echo "Deploying to STAAGING environment manual"
 
 pipelines:
   pull-requests:
