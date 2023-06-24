@@ -87,8 +87,6 @@ definitions:
 
     - step: &push-image
         name: Push image to AWS ECR
-        trigger: manual
-        deployment: staging
         script:
           - IMAGE_NAME=$DOCKER_HUB_USER/$BITBUCKET_REPO_SLUG
           - docker load --input "${BITBUCKET_REPO_SLUG}.tar"
