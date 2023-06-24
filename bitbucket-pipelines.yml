@@ -112,7 +112,7 @@ definitions:
     - step: &deploy-to-staging
         name: Deploy to stag
         deployment: staging
-        trigger: manual  # Uncomment to make this a manual deployment.
+        trigger: manual
         script:
           - echo "Deploying to staging environment de forma manual"
 
@@ -136,3 +136,14 @@ pipelines:
             - step: *test-database
       - step: *build-image
       - step: *push-image
+      - step: *deploy-to-test
+
+    production:
+      - step: *build
+      - parallel:
+          fails-fast: true
+          steps:
+            - step: *test-database
+      - step: *build-image
+      - step: *push-image
+      - step: *deploy-to-staging
