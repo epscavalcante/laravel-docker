@@ -46,4 +46,6 @@ COPY --from=builder /var/www .
 
 EXPOSE 9000
 
-ENTRYPOINT [ "php-fpm" ]
+# ENTRYPOINT [ "php-fpm" ]
+
+CMD ["./.docker/entrypoint.prod.sh"]
