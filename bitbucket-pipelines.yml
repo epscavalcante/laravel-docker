@@ -96,9 +96,9 @@ definitions:
           - docker tag $IMAGE_NAME $IMAGE_NAME:$IMAGE_VERSION
           - pipe: atlassian/aws-ecr-push-image:2.0.0
             variables:
-              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-              AWS_DEFAULT_REGION: us-east-1
+              AWS_ACCESS_KEY_ID: $GLOBAL_ECR_AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $GLOBAL_ECR_AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: $GLOBAL_ECR_AWS_DEFAULT_REGION
               IMAGE_NAME: $IMAGE_NAME
               TAGS: "latest $IMAGE_VERSION"
         cache:
@@ -135,7 +135,7 @@ pipelines:
           steps:
             - step: *test-database
       - step: *build-image
-      # - step: *push-image
+      - step: *push-image
       - step: *deploy-to-test
 
     production:
