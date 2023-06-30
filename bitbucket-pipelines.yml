@@ -74,7 +74,7 @@ definitions:
         name: Build image
         script:
           - export DOCKER_BUILDKIT=1
-          - IMAGE_NAME=$BITBUCKET_WORKSPACE/$BITBUCKET_REPO_SLUG
+          - IMAGE_NAME=$BITBUCKET_REPO_SLUG
           - IMAGE_VERSION=$BITBUCKET_BRANCH-$BITBUCKET_BUILD_NUMBER
           - echo $IMAGE_NAME
           - echo $IMAGE_VERSION
@@ -90,7 +90,7 @@ definitions:
     - step: &push-image
         name: Push image to AWS ECR
         script:
-          - IMAGE_NAME=$BITBUCKET_WORKSPACE/$BITBUCKET_REPO_SLUG
+          - IMAGE_NAME=$BITBUCKET_REPO_SLUG
           - IMAGE_VERSION=$BITBUCKET_BRANCH-$BITBUCKET_BUILD_NUMBER
           - docker load --input "${BITBUCKET_REPO_SLUG}.tar"
           - docker tag $IMAGE_NAME $IMAGE_NAME:$IMAGE_VERSION
