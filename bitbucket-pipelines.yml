@@ -74,10 +74,12 @@ definitions:
         name: Build image
         script:
           - export DOCKER_BUILDKIT=1
-          - echo $BITBUCKET_REPO_SLUG
-          - IMAGE_NAME=$DOCKER_HUB_USER/$BITBUCKET_REPO_SLUG
+          - IMAGE_NAME=$BITBUCKET_WORKSPACE/$BITBUCKET_REPO_SLUG
+          - IMAGE_VERSION=$BITBUCKET_BRANCH/$BITBUCKET_BUILD_NUMBER
+          - echo $IMAGE_NAME
+          - echo $IMAGE_VERSION
           - docker build . -t $IMAGE_NAME -f ./.docker/php/Dockerfile.prod
-          - docker save $IMAGE_NAME --output "${BITBUCKET_REPO_SLUG}.tar"
+          - docker save $IMAGE_NAME --output "${IMAGE_NAME}.tar"
         services:
           - docker
         caches:
@@ -88,17 +90,17 @@ definitions:
     - step: &push-image
         name: Push image to AWS ECR
         script:
-          - IMAGE_NAME=$DOCKER_HUB_USER/$BITBUCKET_REPO_SLUG
-          - docker load --input "${BITBUCKET_REPO_SLUG}.tar"
-          # - docker tag $IMAGE_NAME $IMAGE_NAME:latest
-          - docker tag $IMAGE_NAME $IMAGE_NAME:$BITBUCKET_COMMIT
+          - IMAGE_NAME=$BITBUCKET_WORKSPACE/$BITBUCKET_REPO_SLUG
+          - IMAGE_VERSION=$BITBUCKET_BRANCH/$BITBUCKET_BUILD_NUMBER
+          - docker load --input "${IMAGE_NAME}.tar"
+          - docker tag $IMAGE_NAME $IMAGE_NAME:$IMAGE_VERSION
           - pipe: atlassian/aws-ecr-push-image:2.0.0
             variables:
               AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
               AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
               AWS_DEFAULT_REGION: us-east-1
               IMAGE_NAME: $IMAGE_NAME
-              TAGS: "latest $BITBUCKET_COMMIT"
+              TAGS: "latest $IMAGE_VERSION"
         cache:
           - docker
 
@@ -112,7 +114,7 @@ definitions:
         deployment: staging
         trigger: manual
         script:
-          - echo "Deploying to STAAGING environment manual"
+          - echo "Deploying to STAGING environment manual"
 
 pipelines:
   pull-requests:
@@ -133,7 +135,7 @@ pipelines:
           steps:
             - step: *test-database
       - step: *build-image
-      - step: *push-image
+      # - step: *push-image
       - step: *deploy-to-test
 
     production:
